@@ -48,6 +48,7 @@ from vllm_ascend.utils import (
     AscendDeviceType,
     get_ascend_device_type,
     npu_stream_switch,
+    vllm_version_is,
 )
 
 
@@ -101,16 +102,23 @@ class AscendDeepseekV4IndexerCache(DeepseekV4IndexerCache):
         from vllm_ascend.models.layer.attention.layer import DSV4_BLOCK_SIZES
 
         storage_block_size = DSV4_BLOCK_SIZES[vllm_config.cache_config.block_size][0][0]
+        # vLLM #51718 replaced MLAAttentionSpec.compress_ratio with
+        # AttentionSpec.tokens_per_state on main.
+        ratio_kwargs = (
+            {"compress_ratio": self.compress_ratio}
+            if vllm_version_is("0.27.1")
+            else {"tokens_per_state": self.compress_ratio}
+        )
         return AscendMLAAttentionSpec(
             block_size=storage_block_size * self.compress_ratio,
             num_kv_heads=1,
             head_size=self.head_dim,
             dtype=self.dtype,
             model_version="deepseek_v4",
-            compress_ratio=self.compress_ratio,
             cache_dtype_str=self.cache_config.cache_dtype,
             scale_dim=1 if self.head_dim == 128 else 0,
             scale_dtype=torch.float if get_ascend_device_type() in {AscendDeviceType.A5} else torch.float16,
+            **ratio_kwargs,
         )
 
     def forward(self): ...
