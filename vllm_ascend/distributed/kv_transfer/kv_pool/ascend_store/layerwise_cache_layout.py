@@ -13,6 +13,7 @@ from vllm.v1.kv_cache_interface import (
     KVCacheTensor,
     UniformTypeKVCacheSpecs,
 )
+
 from vllm_ascend.utils import get_kv_cache_tensor_layers, vllm_version_is
 
 _NUM_SHARED_BUFFERS = "layerwise_num_shared_buffers"
