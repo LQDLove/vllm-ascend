@@ -53,6 +53,7 @@ from vllm_ascend.core.kv_cache_interface import (
     AscendMLAAttentionSpec,
     AscendSFAIndexerCacheSpec,
     AscendSlidingWindowMLASpec,
+    get_storage_block_size,
 )
 from vllm_ascend.quantization.utils import enable_fa_quant
 from vllm_ascend.utils import (
@@ -426,7 +427,7 @@ def _view_dsv4_cache(
 
     k_shape = attn_backend.get_kv_cache_shape(
         num_blocks,
-        kv_cache_spec.storage_block_size,
+        get_storage_block_size(kv_cache_spec),
         kv_cache_spec.num_kv_heads,
         kv_cache_spec.head_size,
     )
@@ -439,7 +440,7 @@ def _view_dsv4_cache(
         scale_dtype = kv_cache_spec.scale_dtype
         scale_shape = attn_backend.get_kv_cache_shape(
             num_blocks,
-            kv_cache_spec.storage_block_size,
+            get_storage_block_size(kv_cache_spec),
             kv_cache_spec.num_kv_heads,
             scale_dim,
         )
@@ -448,7 +449,7 @@ def _view_dsv4_cache(
         if get_ascend_device_type() in {AscendDeviceType.A5}:
             full_shape = attn_backend.get_kv_cache_shape(
                 num_blocks,
-                kv_cache_spec.storage_block_size,
+                get_storage_block_size(kv_cache_spec),
                 kv_cache_spec.num_kv_heads,
                 kv_cache_spec.head_size + scale_dim * get_dtype_size(scale_dtype),
             )
@@ -746,9 +747,10 @@ def _reshape_kv_cache_v2(
             continue
 
         group_spec = group.kv_cache_spec
+        group_storage_block_size = get_storage_block_size(group_spec)
         kernel_block_size = (
-            group_spec.storage_block_size
-            if group_spec.storage_block_size != group_spec.block_size
+            group_storage_block_size
+            if group_storage_block_size != group_spec.block_size
             else kernel_block_sizes[group.kv_cache_group_id]
         )
 
@@ -834,7 +836,7 @@ def _reshape_kv_cache_v2(
             if total_bytes % kv_cache_spec.page_size_bytes:
                 raise ValueError(f"KV cache for {layer_name} is not a whole number of pages.")
             num_blocks = total_bytes // kv_cache_spec.page_size_bytes
-            num_blocks_per_kv_block = kv_cache_spec.storage_block_size // kernel_block_size
+            num_blocks_per_kv_block = get_storage_block_size(kv_cache_spec) // kernel_block_size
             kernel_num_blocks = num_blocks * num_blocks_per_kv_block
             kv_cache_shape = group.backend.get_kv_cache_shape(
                 kernel_num_blocks,
