@@ -4214,16 +4214,9 @@ class NPUModelRunner(GPUModelRunner):
         # contiguous per-layer tensors, which the default layer/block-compact
         # layout provides. Materialize slices of one backing tensor so cache
         # groups retain #51718's overlay semantics without reducing capacity.
-        # This applies to every multi-group model (e.g. encoder-decoder
-        # attention like Whisper), not only hybrid attention/Mamba models;
-        # otherwise each group would allocate its own full-size buffer and
-        # over-commit device memory.
         if (
             not use_ascend_shared_layout
-            and (
-                self.hybrid_with_attn_and_mamba
-                or (len(kv_cache_config.kv_cache_groups) > 1 and not vllm_version_is("0.27.1"))
-            )
+            and self.hybrid_with_attn_and_mamba
             and supports_shared_backing_with_kv_transfer
             and not self.use_sparse
             and not self.use_compress
@@ -4710,7 +4703,7 @@ class NPUModelRunner(GPUModelRunner):
                             raw_k_tensor, raw_v_tensor = raw_cache
                             sum_page_size_bytes = raw_k_tensor.numel() + raw_v_tensor.numel()
                     elif (
-                        not self.use_compress
+                        self.hybrid_with_attn_and_mamba
                         and "cache_only_layers" not in layer_name
                         and not is_hidden_state_cache_spec(current_kv_cache_spec)
                         and isinstance(kv_cache_raw_tensors[layer_name], torch.Tensor)
@@ -4718,10 +4711,6 @@ class NPUModelRunner(GPUModelRunner):
                     ):
                         # Currently, we ensure that the same kvcache format is used even if there
                         # is no shared layer, such as the full attention mtp layer of qwen3.5, etc.
-                        # This also covers shared-backing slices produced by
-                        # _allocate_kv_cache_tensors for multi-group models (e.g.
-                        # encoder-decoder attention), whose per-layer region is a
-                        # combined [K][V] tensor rather than separate (k, v).
                         raw_k_tensor, raw_v_tensor = kv_cache_raw_tensors[layer_name], kv_cache_raw_tensors[layer_name]
                         sum_page_size_bytes = raw_k_tensor.numel()
                         raw_kv_is_combined = True
