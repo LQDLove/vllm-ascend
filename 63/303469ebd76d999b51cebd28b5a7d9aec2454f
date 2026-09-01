@@ -1,0 +1,19 @@
+vllm_ascend/worker/model_runner_v1.py
+  s_093342f2fe086f::t_8ca43b2c0b6051 4219,4706
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "63303469ebd76d999b51cebd28b5a7d9aec2454f",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>"
+    }
+  }
+}
