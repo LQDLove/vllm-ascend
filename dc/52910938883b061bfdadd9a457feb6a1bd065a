@@ -1,0 +1,32 @@
+docs/source/tutorials/models/GLM5.3.md
+  s_093342f2fe086f::t_6a931cb074f5b9 34,136
+  s_093342f2fe086f::t_291bc46c1cb70b 124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "dc52910938883b061bfdadd9a457feb6a1bd065a",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "source_scene": "agent",
+        "runtime_client": "trae-tob-git-ai",
+        "display_model_name": "GLM-5.3-Flash",
+        "operation_id": "6a96c7c1763826ac622d7c87",
+        "tool_use_id": "6a96c7c1763826ac622d7c87",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "tool_name": "RunCommand",
+        "edit_kind": "bash",
+        "client_type": "ide",
+        "external_session_id": "6a96bb7b763826ac622d7a7d"
+      }
+    }
+  }
+}
