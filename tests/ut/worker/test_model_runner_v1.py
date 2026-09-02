@@ -515,6 +515,118 @@ class TestNPUModelRunnerKVCache(unittest.TestCase):
                     base_offset + layer_size,
                 )
 
+    @unittest.skipIf(vllm_version_is("0.27.1"), "vLLM #51718 only changed the main planner")
+    def test_pure_attention_multi_group_shares_standardized_backing_allocation(self):
+        # Encoder-decoder models like Whisper produce one KV cache group per
+        # side. vLLM #51718 describes every group as a view into one common
+        # backing allocation; allocating tensor.size per descriptor duplicates
+        # the full cache pool and OOMs (PR #14872).
+        encoder_name = "model.encoder.layers.0.self_attn.attn"
+        decoder_name = "model.decoder.layers.0.self_attn.attn"
+        spec = FullAttentionSpec(
+            block_size=2,
+            num_kv_heads=1,
+            head_size=4,
+            head_size_v=4,
+            dtype=torch.float16,
+        )
+        num_blocks = 3
+        layer_size = num_blocks * spec.page_size_bytes
+        kv_cache_config = KVCacheConfig(
+            num_blocks=num_blocks,
+            kv_cache_tensors=[
+                KVCacheTensor(
+                    size=layer_size,
+                    layers=[encoder_name],
+                    layer_stride=layer_size,
+                    block_stride=spec.page_size_bytes,
+                    offset=0,
+                ),
+                KVCacheTensor(
+                    size=layer_size,
+                    layers=[decoder_name],
+                    layer_stride=layer_size,
+                    block_stride=spec.page_size_bytes,
+                    offset=0,
+                ),
+            ],
+            kv_cache_groups=[
+                KVCacheGroupSpec(layer_names=[encoder_name], kv_cache_spec=spec),
+                KVCacheGroupSpec(layer_names=[decoder_name], kv_cache_spec=spec),
+            ],
+        )
+
+        runner = self._build_runner()
+        raw_caches = runner._allocate_kv_cache_tensors(kv_cache_config)
+
+        storage_ptrs = {raw.untyped_storage().data_ptr() for raw in raw_caches.values()}
+        self.assertEqual(len(storage_ptrs), 1)
+        self.assertEqual(raw_caches[encoder_name].numel(), layer_size)
+        self.assertEqual(raw_caches[decoder_name].numel(), layer_size)
+
+    @unittest.skipIf(vllm_version_is("0.27.1"), "vLLM #51718 only changed the main planner")
+    def test_dsv4_main_shared_tuple_descriptors_materialize_one_backing(self):
+        # The restored DeepSeek-V4 main planner emits stride descriptors whose
+        # layer_stride is the full shared-tuple stride (not the per-layer
+        # size), and different groups alias the same tuple slots by using
+        # identical geometry. The allocator must materialize one backing and
+        # follow offset/layer_stride instead of rejecting the layout.
+        c4_name = "model.layers.0.self_attn.attn"
+        c128_name = "model.layers.1.self_attn.attn"
+        c4_spec = AscendMLAAttentionSpec(
+            block_size=128 * 4,
+            num_kv_heads=1,
+            head_size=128,
+            dtype=torch.float16,
+            model_version="deepseek_v4",
+            tokens_per_state=4,
+        )
+        c128_spec = AscendMLAAttentionSpec(
+            block_size=128 * 128,
+            num_kv_heads=1,
+            head_size=128,
+            dtype=torch.float16,
+            model_version="deepseek_v4",
+            tokens_per_state=128,
+        )
+        num_blocks = 3
+        backing_size = num_blocks * (c4_spec.page_size_bytes + c128_spec.page_size_bytes)
+        kv_cache_config = KVCacheConfig(
+            num_blocks=num_blocks,
+            kv_cache_tensors=[
+                KVCacheTensor(
+                    size=backing_size,
+                    layers=[c4_name],
+                    layer_stride=backing_size,
+                    block_stride=c4_spec.page_size_bytes,
+                    offset=0,
+                ),
+                KVCacheTensor(
+                    size=backing_size,
+                    layers=[c128_name],
+                    layer_stride=backing_size,
+                    block_stride=c128_spec.page_size_bytes,
+                    offset=0,
+                ),
+            ],
+            kv_cache_groups=[
+                KVCacheGroupSpec(layer_names=[c4_name], kv_cache_spec=c4_spec),
+                KVCacheGroupSpec(layer_names=[c128_name], kv_cache_spec=c128_spec),
+            ],
+        )
+
+        runner = self._build_runner()
+        raw_caches = runner._allocate_kv_cache_tensors(kv_cache_config)
+
+        # Shared tuples: both groups' layers alias the same physical region.
+        self.assertEqual(
+            raw_caches[c4_name].untyped_storage().data_ptr(),
+            raw_caches[c128_name].untyped_storage().data_ptr(),
+        )
+        self.assertEqual(raw_caches[c4_name].storage_offset(), raw_caches[c128_name].storage_offset())
+        self.assertEqual(raw_caches[c4_name].numel(), num_blocks * c4_spec.page_size_bytes)
+        self.assertEqual(raw_caches[c128_name].numel(), num_blocks * c128_spec.page_size_bytes)
+
     def test_reshape_kv_cache_uses_layer_spec_for_draft_gqa(self):
         runner = self._build_runner()
         runner.sparse_kv_offload_enabled = False

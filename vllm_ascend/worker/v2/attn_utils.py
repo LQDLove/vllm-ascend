@@ -588,79 +588,92 @@ def _allocate_kv_cache(
     layer_kv_cache_spec = _get_layer_kv_cache_specs(kv_cache_config)
     has_mamba = any(isinstance(spec, MambaSpec) for spec in layer_kv_cache_spec.values())
     has_attention = any(isinstance(spec, AttentionSpec) for spec in layer_kv_cache_spec.values())
-    use_hybrid_layout = has_mamba and has_attention
+    has_hybrid_layout = has_mamba and has_attention
+    # vLLM #51718: multi-group models (hybrid attention/Mamba, pure-attention
+    # encoder-decoder like Whisper, and the DeepSeek-V4 shared-tuple layout)
+    # describe one common backing allocation that the groups overlay from
+    # byte 0. Allocating tensor.size per descriptor would duplicate the whole
+    # cache pool and OOM before the second tensor is initialized.
+    use_shared_backing = has_hybrid_layout or (
+        len(kv_cache_config.kv_cache_groups) > 1 and not vllm_version_is("0.27.1")
+    )
 
-    # vLLM #51718 changed every KVCacheTensor to describe a view into one
-    # common backing allocation. Hybrid groups overlay that backing from byte
-    # zero because a block ID belongs to only one group at a time. Allocate it
-    # once here; allocating tensor.size for every descriptor duplicates the
-    # full cache pool and can OOM before the second tensor is initialized.
-    hybrid_backing: torch.Tensor | None = None
-    if use_hybrid_layout and not vllm_version_is("0.27.1"):
+    # Allocate the #51718 backing once; per-layer views are materialized below.
+    shared_backing: torch.Tensor | None = None
+    if use_shared_backing and not vllm_version_is("0.27.1"):
         tensor_sizes = {tensor.size for tensor in kv_cache_config.kv_cache_tensors}
         if len(tensor_sizes) != 1:
-            raise ValueError("Hybrid KV cache tensors must share one backing allocation.")
+            raise ValueError("Shared KV cache tensors must share one backing allocation.")
         tensor_size = tensor_sizes.pop()
         if vllm_config.kv_transfer_config is None:
-            hybrid_backing = torch.zeros(tensor_size, dtype=torch.int8, device=device)
+            shared_backing = torch.zeros(tensor_size, dtype=torch.int8, device=device)
         else:
-            hybrid_backing = torch.zeros(
+            shared_backing = torch.zeros(
                 tensor_size + alignment,
                 dtype=torch.int8,
                 device=device,
             )
-            hybrid_backing = _align_memory(hybrid_backing, alignment)[:tensor_size]
+            shared_backing = _align_memory(shared_backing, alignment)[:tensor_size]
 
     for kv_cache_tensor in kv_cache_config.kv_cache_tensors:
         shared_names = get_kv_cache_tensor_layers(kv_cache_tensor)
         if not shared_names:
             continue
 
-        if is_dsv4_model:
+        if is_dsv4_model and shared_backing is None:
             # DSA reshapes it with its own page-strided layout below.
-            if vllm_config.kv_transfer_config is None:
-                raw_tensor = torch.zeros(kv_cache_tensor.size, dtype=torch.int8, device=device)
+            # v0.27.1 `shared_by` descriptors alias one physical allocation per
+            # descriptor; on main (only reachable without the shared backing,
+            # e.g. single-group DSV4) each layer owns its own region.
+            if vllm_version_is("0.27.1"):
+                if vllm_config.kv_transfer_config is None:
+                    raw_tensor = torch.zeros(kv_cache_tensor.size, dtype=torch.int8, device=device)
+                else:
+                    raw_tensor = torch.zeros(
+                        kv_cache_tensor.size + alignment,
+                        dtype=torch.int8,
+                        device=device,
+                    )
+                    raw_tensor = _align_memory(raw_tensor, alignment)[: kv_cache_tensor.size]
+                for layer_name in shared_names:
+                    kv_cache_raw_tensors[layer_name] = raw_tensor
             else:
-                raw_tensor = torch.zeros(
-                    kv_cache_tensor.size + alignment,
-                    dtype=torch.int8,
-                    device=device,
-                )
-                raw_tensor = _align_memory(raw_tensor, alignment)[: kv_cache_tensor.size]
-            for layer_name in shared_names:
-                kv_cache_raw_tensors[layer_name] = raw_tensor
+                for layer_name in shared_names:
+                    layer_size = kv_cache_config.num_blocks * layer_kv_cache_spec[layer_name].page_size_bytes
+                    if vllm_config.kv_transfer_config is None:
+                        kv_cache_raw_tensors[layer_name] = torch.zeros(
+                            layer_size, dtype=torch.int8, device=device
+                        )
+                    else:
+                        raw_tensor = torch.zeros(layer_size + alignment, dtype=torch.int8, device=device)
+                        kv_cache_raw_tensors[layer_name] = _align_memory(raw_tensor, alignment)[:layer_size]
             continue
 
-        example_layer_name = shared_names[0]
-        example_spec = layer_kv_cache_spec[example_layer_name]
-
-        if hybrid_backing is not None:
+        if shared_backing is not None:
             for layer_idx, layer_name in enumerate(shared_names):
                 layer_spec = layer_kv_cache_spec[layer_name]
                 layer_size = kv_cache_config.num_blocks * layer_spec.page_size_bytes
-                if (
-                    kv_cache_tensor.layer_stride != layer_size
-                    or kv_cache_tensor.block_stride != layer_spec.page_size_bytes
-                ):
+                if kv_cache_tensor.block_stride != layer_spec.page_size_bytes:
                     raise ValueError(
-                        "Ascend hybrid KV cache requires contiguous per-layer "
-                        f"views, but {layer_name} has layer_stride="
-                        f"{kv_cache_tensor.layer_stride}, block_stride="
+                        "Ascend shared KV cache requires contiguous per-layer "
+                        f"views, but {layer_name} has block_stride="
                         f"{kv_cache_tensor.block_stride}, page_size="
                         f"{layer_spec.page_size_bytes}."
                     )
                 start = kv_cache_tensor.offset + layer_idx * kv_cache_tensor.layer_stride
                 end = start + layer_size
-                if end > hybrid_backing.numel():
-                    raise ValueError(f"Hybrid KV cache view for {layer_name} exceeds the backing allocation.")
-                kv_cache_raw_tensors[layer_name] = hybrid_backing[start:end]
+                if end > shared_backing.numel():
+                    raise ValueError(f"Shared KV cache view for {layer_name} exceeds the backing allocation.")
+                kv_cache_raw_tensors[layer_name] = shared_backing[start:end]
             continue
 
         # Use one raw allocation for Mamba and hybrid caches. The reshape step
         # creates the V1-compatible contiguous state views and overlaps
         # Attention K/V with the aligned tail of the same buffer.
+        example_layer_name = shared_names[0]
+        example_spec = layer_kv_cache_spec[example_layer_name]
         contains_mamba = any(isinstance(layer_kv_cache_spec[layer_name], MambaSpec) for layer_name in shared_names)
-        if contains_mamba or use_hybrid_layout:
+        if contains_mamba or has_hybrid_layout:
             tensor_size = kv_cache_tensor.size
             if vllm_config.kv_transfer_config is None:
                 tensor = torch.zeros(tensor_size, dtype=torch.int8, device=device)

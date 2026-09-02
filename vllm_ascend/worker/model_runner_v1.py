@@ -4180,13 +4180,14 @@ class NPUModelRunner(GPUModelRunner):
         # prefill disaggregation need the addr of cache tensor be aligned with 2M
         alignment = 2 * 1024 * 1024
         layer_kv_cache_spec = self._get_layer_kv_cache_specs(kv_cache_config)
-        # Ascend's restored DeepSeek-V4 planner retains the pre-#51718
-        # shared-tuple semantics. All other main layouts use #51718's generic
-        # backing-store descriptors.
-        use_ascend_shared_layout = vllm_version_is("0.27.1") or any(
-            getattr(spec, "model_version", None) == "deepseek_v4"
-            for spec in layer_kv_cache_spec.values()
-        )
+        # v0.27.1 keeps the pre-vLLM-#51718 `shared_by` semantics: one tensor
+        # per descriptor, with all shared layers aliasing the same physical
+        # blocks. On main, #51718 standardized the descriptors as views into
+        # one common backing allocation, which Ascend materializes below. This
+        # also covers the restored DeepSeek-V4 shared-tuple planner, whose
+        # descriptors use the same offset/layer_stride geometry.
+        use_legacy_shared_by_layout = vllm_version_is("0.27.1")
+        use_standardized_backing = not use_legacy_shared_by_layout
         # vLLM #51718 no longer lists layers from different cache groups in one
         # descriptor. Detect hybrid models across all groups instead of within
         # each descriptor so the attention view keeps the combined K/V format.
@@ -4219,39 +4220,45 @@ class NPUModelRunner(GPUModelRunner):
         # otherwise each group would allocate its own full-size buffer and
         # over-commit device memory.
         if (
-            not use_ascend_shared_layout
-            and (
-                self.hybrid_with_attn_and_mamba
-                or (len(kv_cache_config.kv_cache_groups) > 1 and not vllm_version_is("0.27.1"))
-            )
+            use_standardized_backing
+            and (self.hybrid_with_attn_and_mamba or len(kv_cache_config.kv_cache_groups) > 1)
             and supports_shared_backing_with_kv_transfer
             and not self.use_sparse
             and not self.use_compress
             and kv_cache_config.kv_cache_tensors
         ):
-            layout = self.vllm_config.cache_config.get_resolved_kv_cache_layout()
             tensor_sizes = {tensor.size for tensor in kv_cache_config.kv_cache_tensors}
             regions: list[tuple[str, int, int]] = []
-            if len(tensor_sizes) == 1 and layout.is_layer_compact and layout.is_block_compact:
+            materialization_failed = False
+            if len(tensor_sizes) == 1:
                 backing_size = next(iter(tensor_sizes))
                 for descriptor in kv_cache_config.kv_cache_tensors:
-                    for layer_idx, layer_name in enumerate(get_kv_cache_tensor_layers(descriptor)):
+                    descriptor_layers = get_kv_cache_tensor_layers(descriptor)
+                    if any(
+                        isinstance(layer_kv_cache_spec.get(layer_name), AscendSFAIndexerCacheSpec)
+                        for layer_name in descriptor_layers
+                    ):
+                        # Indexer caches interleave K and scale in one page and
+                        # cannot be materialized as a flat per-layer slice; the
+                        # dedicated branch below allocates them instead.
+                        continue
+                    for layer_idx, layer_name in enumerate(descriptor_layers):
                         spec = layer_kv_cache_spec[layer_name]
                         layer_size = kv_cache_config.num_blocks * spec.page_size_bytes
                         start = descriptor.offset + layer_idx * descriptor.layer_stride
                         if descriptor.block_stride != spec.page_size_bytes or start + layer_size > backing_size:
-                            regions = []
+                            materialization_failed = True
                             break
                         regions.append((layer_name, start, layer_size))
-                    if not regions:
+                    if materialization_failed:
                         break
-                if regions:
-                    backing = self._allocate_int8_cache_tensor(
-                        backing_size,
-                        alignment,
-                    )
-                    for layer_name, start, layer_size in regions:
-                        kv_cache_raw_tensors[layer_name] = backing[start : start + layer_size]
+            if not materialization_failed and regions:
+                backing = self._allocate_int8_cache_tensor(
+                    backing_size,
+                    alignment,
+                )
+                for layer_name, start, layer_size in regions:
+                    kv_cache_raw_tensors[layer_name] = backing[start : start + layer_size]
 
         for kv_cache_tensor in kv_cache_config.kv_cache_tensors:
             shared_layers = get_kv_cache_tensor_layers(kv_cache_tensor)
@@ -4285,10 +4292,10 @@ class NPUModelRunner(GPUModelRunner):
                     # stored directly on the tensor).
                     per_layer_size = (
                         kv_cache_tensor.size
-                        if use_ascend_shared_layout
+                        if use_legacy_shared_by_layout
                         else kv_cache_tensor.size // len(shared_layers)
                     )
-                    if use_ascend_shared_layout:
+                    if use_legacy_shared_by_layout:
                         if self.vllm_config.kv_transfer_config is None:
                             tensor = torch.zeros(per_layer_size, dtype=torch.int8, device=self.device)
                         else:
@@ -4349,7 +4356,7 @@ class NPUModelRunner(GPUModelRunner):
                 ):
                     current_kv_cache_spec = layer_kv_cache_spec[layer_name]
                     num_blocks = kv_cache_tensor.size // current_kv_cache_spec.page_size_bytes
-                    if not use_ascend_shared_layout:
+                    if use_standardized_backing:
                         # vLLM #51718 packs all group layers into one tensor;
                         # kv_cache_config.num_blocks is the per-layer block count.
                         num_blocks = kv_cache_config.num_blocks
@@ -4373,8 +4380,8 @@ class NPUModelRunner(GPUModelRunner):
                     else:
                         scale_tensor_size = None
 
-                    if use_ascend_shared_layout:
-                        # v0.27.1 and Ascend DSV4 descriptors alias physical blocks.
+                    if use_legacy_shared_by_layout:
+                        # v0.27.1 `shared_by` descriptors alias physical blocks.
                         if scale_tensor_size is not None:
                             kv_cache_raw_tensors[shared_layers[0]] = self._allocate_sparse_c8_indexer_tensors(
                                 dsa_k_tensor_size=k_tensor_size,
@@ -4421,7 +4428,7 @@ class NPUModelRunner(GPUModelRunner):
                     # when the tensor's group is not the largest group.
                     kv_cache_tensor_size = (
                         kv_cache_tensor.size
-                        if use_ascend_shared_layout
+                        if use_legacy_shared_by_layout
                         else kv_cache_config.num_blocks * current_kv_cache_spec.page_size_bytes
                     )
                     if current_sparse_sfa_c8:
@@ -4446,7 +4453,7 @@ class NPUModelRunner(GPUModelRunner):
                         assert self.use_sparse, "Sparse KV offload only support sparse attention."
                         assert not current_sparse_sfa_c8, "Sparse KV offload do not support sparse SFA C8."
                         assert v_tensor_size is not None
-                        if use_ascend_shared_layout:
+                        if use_legacy_shared_by_layout:
                             assert len(shared_layers) == 1, "Sparse KV offload do not support HMA."
                             kv_cache_raw_tensors[layer_name] = (
                                 allocate_kv_cache_tensors_for_sparse_kv_offload(
@@ -4472,8 +4479,8 @@ class NPUModelRunner(GPUModelRunner):
                                         )
                                     )
                         continue
-                    if use_ascend_shared_layout:
-                        # v0.27.1 and Ascend DSV4 descriptors alias physical
+                    if use_legacy_shared_by_layout:
+                        # v0.27.1 `shared_by` descriptors alias physical
                         # blocks; allocate once and reuse for every shared layer.
                         v_tensor = None
                         k_tensor = self._allocate_int8_cache_tensor(
