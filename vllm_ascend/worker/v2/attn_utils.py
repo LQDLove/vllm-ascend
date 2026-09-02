@@ -641,9 +641,7 @@ def _allocate_kv_cache(
                 for layer_name in shared_names:
                     layer_size = kv_cache_config.num_blocks * layer_kv_cache_spec[layer_name].page_size_bytes
                     if vllm_config.kv_transfer_config is None:
-                        kv_cache_raw_tensors[layer_name] = torch.zeros(
-                            layer_size, dtype=torch.int8, device=device
-                        )
+                        kv_cache_raw_tensors[layer_name] = torch.zeros(layer_size, dtype=torch.int8, device=device)
                     else:
                         raw_tensor = torch.zeros(layer_size + alignment, dtype=torch.int8, device=device)
                         kv_cache_raw_tensors[layer_name] = _align_memory(raw_tensor, alignment)[:layer_size]

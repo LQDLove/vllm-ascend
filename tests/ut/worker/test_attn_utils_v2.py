@@ -247,10 +247,7 @@ def test_main_dsv4_multi_group_materializes_shared_tuple_backing(monkeypatch):
 
     assert raw_caches[c4_name].numel() == num_blocks * c4_spec.page_size_bytes
     assert raw_caches[c128_name].numel() == num_blocks * c128_spec.page_size_bytes
-    assert (
-        raw_caches[c4_name].untyped_storage().data_ptr()
-        == raw_caches[c128_name].untyped_storage().data_ptr()
-    )
+    assert raw_caches[c4_name].untyped_storage().data_ptr() == raw_caches[c128_name].untyped_storage().data_ptr()
     assert raw_caches[c4_name].storage_offset() == raw_caches[c128_name].storage_offset()
 
 
