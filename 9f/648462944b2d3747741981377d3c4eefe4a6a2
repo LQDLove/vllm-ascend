@@ -1,0 +1,33 @@
+vllm_ascend/worker/v2/attn_utils.py
+  s_093342f2fe086f::t_7cb874fcb3303c 644
+tests/ut/worker/test_attn_utils_v2.py
+  s_093342f2fe086f::t_7cb874fcb3303c 250
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "9f648462944b2d3747741981377d3c4eefe4a6a2",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "client_type": "ide",
+        "display_model_name": "GLM-5.3-Flash",
+        "runtime_client": "trae-tob-git-ai",
+        "operation_id": "6a976fa7763826ac622d7e51",
+        "tool_name": "RunCommand",
+        "tool_use_id": "6a976fa7763826ac622d7e51",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "source_scene": "agent",
+        "edit_kind": "bash"
+      }
+    }
+  }
+}
