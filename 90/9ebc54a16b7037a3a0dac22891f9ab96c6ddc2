@@ -1,0 +1,35 @@
+tests/ut/patch/platform/test_patch_mamba_block_aligned_split.py
+  s_093342f2fe086f::t_60beb5766eb228 24
+  s_093342f2fe086f::t_a39209aeb87e95 29-34,43
+tests/ut/worker/test_pcp_manager_v2.py
+  s_093342f2fe086f::t_109d25faf98f98 585-588,598
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "909ebc54a16b7037a3a0dac22891f9ab96c6ddc2",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "kimi-k3__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "source_scene": "unknown",
+        "dedupe_key": "6a96bb7b763826ac622d7a7d:6a993f24763826ac622d82eb:afterEdit:8d645d73",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "tool_use_id": "6a993f24763826ac622d82eb",
+        "tool_id": "SearchReplace",
+        "operation_id": "6a993f24763826ac622d82eb",
+        "runtime_client": "trae-tob-git-ai",
+        "client_type": "ide",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "edit_kind": "file_edit",
+        "tool_type": "agent"
+      }
+    }
+  }
+}
