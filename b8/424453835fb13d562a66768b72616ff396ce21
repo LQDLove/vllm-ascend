@@ -1,0 +1,39 @@
+tests/ut/worker/test_pcp_manager_v2.py
+  s_093342f2fe086f::t_71cac6ae5af646 523-525
+  s_093342f2fe086f::t_7849c5a173f5e2 611
+  s_093342f2fe086f::t_02ed83540b97f0 357
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "b8424453835fb13d562a66768b72616ff396ce21",
+  "prompts": {},
+  "humans": {
+    "h_5ad2db0c38cf05": {
+      "author": "liaoqidan <1107297340@qq.com>"
+    }
+  },
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "dedupe_key": "6a96bb7b763826ac622d7a7d:6a9a1fb496f76ae0ae59148e:afterEdit:8d645d73",
+        "tool_use_id": "6a9a1fb496f76ae0ae59148e",
+        "operation_id": "6a9a1fb496f76ae0ae59148e",
+        "tool_type": "agent",
+        "edit_kind": "file_edit",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "client_type": "ide",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "runtime_client": "trae-tob-git-ai",
+        "source_scene": "unknown",
+        "tool_id": "Edit"
+      }
+    }
+  }
+}
