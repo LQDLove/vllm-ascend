@@ -1,0 +1,33 @@
+Dockerfile
+  s_093342f2fe086f::t_09dc6975732f4c 44
+Dockerfile.310p
+  s_093342f2fe086f::t_e3b079eee82873 39
+Dockerfile.310p.openEuler
+  s_093342f2fe086f::t_fd9b84b94810ba 38
+Dockerfile.a3
+  s_093342f2fe086f::t_d0ed3f28610fe5 47
+Dockerfile.a3.openEuler
+  s_093342f2fe086f::t_f7e6ea1f533098 44
+Dockerfile.a5
+  s_093342f2fe086f::t_ba0faa3536d3d7 47
+Dockerfile.a5.openEuler
+  s_093342f2fe086f::t_9bf87c89d09e53 44
+Dockerfile.openEuler
+  s_093342f2fe086f::t_5c47d41ba4e9be 44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "31588fd8fca2a1a49279c4f54d08cceede8533bf",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>"
+    }
+  }
+}
