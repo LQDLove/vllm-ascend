@@ -1,0 +1,19 @@
+.github/vllm-main-verified.commit
+  s_093342f2fe086f::t_2ee5a5a0cc99db 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "b2439befea53bf8d11fb54018eb5b7a9bce01b09",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>"
+    }
+  }
+}
