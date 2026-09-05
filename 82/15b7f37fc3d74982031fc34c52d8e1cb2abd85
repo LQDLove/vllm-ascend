@@ -1,0 +1,36 @@
+.github/workflows/pr_test.yaml
+  s_e8c109cb8e8846::t_ca85b253240f1b 52
+  s_e8c109cb8e8846::t_2fa1fcfcdf2da1 652-653,655,657
+  s_e8c109cb8e8846::t_6214de90e7bb79 623-624,626,628
+  s_e8c109cb8e8846::t_323d76b4202f9b 92,97-100,105
+  s_e8c109cb8e8846::t_7a6108965f494f 591-592,594,596
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "8215b7f37fc3d74982031fc34c52d8e1cb2abd85",
+  "prompts": {},
+  "sessions": {
+    "s_e8c109cb8e8846": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a9bd88696f76ae0ae59168a",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "LQD <1107297340@qq.com>",
+      "custom_attributes": {
+        "tool_use_id": "6a9bda5d96f76ae0ae591731",
+        "session_id": "6a9bd88696f76ae0ae59168a",
+        "tool_type": "agent",
+        "edit_kind": "file_edit",
+        "source_scene": "unknown",
+        "operation_id": "6a9bda5d96f76ae0ae591731",
+        "runtime_client": "trae-tob-git-ai",
+        "external_session_id": "6a9bd88696f76ae0ae59168a",
+        "dedupe_key": "6a9bd88696f76ae0ae59168a:6a9bda5d96f76ae0ae591731:afterEdit:8112a6ae",
+        "client_type": "ide",
+        "tool_id": "Edit"
+      }
+    }
+  }
+}
