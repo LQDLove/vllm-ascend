@@ -1,0 +1,34 @@
+.github/workflows/pr_test.yaml
+  s_093342f2fe086f::t_02f3af63f099b1 100-105
+  s_093342f2fe086f::t_f20b3e912cfe73 593,596,625,628,654,657
+  s_093342f2fe086f::t_9752ec44923770 52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "fc00e1c0140ff343b3ee0d6b09a7cedca9629cc5",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "edit_kind": "file_edit",
+        "client_type": "ide",
+        "tool_id": "Edit",
+        "runtime_client": "trae-tob-git-ai",
+        "dedupe_key": "6a96bb7b763826ac622d7a7d:6a9be97e96f76ae0ae59187a:afterEdit:49190d14",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "tool_type": "agent",
+        "tool_use_id": "6a9be97e96f76ae0ae59187a",
+        "operation_id": "6a9be97e96f76ae0ae59187a",
+        "source_scene": "unknown"
+      }
+    }
+  }
+}
