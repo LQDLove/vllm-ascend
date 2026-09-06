@@ -1,0 +1,31 @@
+vllm_ascend/worker/v2/aclgraph_utils.py
+  s_093342f2fe086f::t_276043f2a6fc46 75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "9473c035b4971ff8912e87d476c494daa4aeccd5",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "tool_name": "RunCommand",
+        "source_scene": "agent",
+        "edit_kind": "bash",
+        "client_type": "ide",
+        "runtime_client": "trae-tob-git-ai",
+        "display_model_name": "GLM-5.3-Flash",
+        "tool_use_id": "6a9cec3096f76ae0ae591ae8",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "operation_id": "6a9cec3096f76ae0ae591ae8"
+      }
+    }
+  }
+}
