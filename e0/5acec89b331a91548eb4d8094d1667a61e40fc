@@ -1,0 +1,19 @@
+vllm_ascend/patch/platform/__init__.py
+  s_093342f2fe086f::t_98ebb157e5346a 48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "e05acec89b331a91548eb4d8094d1667a61e40fc",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+vllm_ascend/distributed/kv_transfer/kv_p2p/mooncake_hybrid_connector.py
+  s_093342f2fe086f::t_9f7729dd510a34 722
+  s_093342f2fe086f::t_0e8e2ba087a270 378,1716-1735,1745-1759,1787-1800
+  s_093342f2fe086f::t_2d9bbf05d7f5f6 1677
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "d4d009d76efa4550880f1f5cdabea672031f8a26",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": null,
+      "custom_attributes": {
+        "runtime_client": "trae-tob-git-ai",
+        "operation_id": "6a9a965b96f76ae0ae59159d",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "source_scene": "unknown",
+        "tool_use_id": "6a9a965b96f76ae0ae59159d",
+        "edit_kind": "file_edit",
+        "dedupe_key": "6a96bb7b763826ac622d7a7d:6a9a965b96f76ae0ae59159d:afterEdit:1837c9be",
+        "tool_id": "Edit",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "client_type": "ide",
+        "tool_type": "agent"
+      }
+    }
+  }
+}

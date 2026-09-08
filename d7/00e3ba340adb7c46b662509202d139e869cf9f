@@ -1,0 +1,21 @@
+README.md
+  s_093342f2fe086f::t_f28e20e3b89add 94
+README.zh.md
+  s_093342f2fe086f::t_23caf7cf812db0 87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "d700e3ba340adb7c46b662509202d139e869cf9f",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+tests/ut/models/test_deepseek_v4_moe.py
+  s_093342f2fe086f::t_5101d2cc7a26d3 79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "c25bbe3b4f561914d3f74c9a8f80ad6c926f5575",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>"
+    }
+  }
+}
