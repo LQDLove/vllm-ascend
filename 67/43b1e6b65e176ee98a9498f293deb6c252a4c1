@@ -1,0 +1,57 @@
+vllm_ascend/ops/fused_moe/fused_moe.py
+  h_5ad2db0c38cf05 342-346
+  s_fe795de7a42f7b::t_db674e2b9c63cd 320
+  s_17bf219b2431fb::t_b9bbd23dfbcacd 316-317
+  s_6b902d02497720::t_b009f87d6be38c 318-319
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "6743b1e6b65e176ee98a9498f293deb6c252a4c1",
+  "prompts": {},
+  "humans": {
+    "h_5ad2db0c38cf05": {
+      "author": "liaoqidan <1107297340@qq.com>"
+    }
+  },
+  "sessions": {
+    "s_17bf219b2431fb": {
+      "agent_id": {
+        "tool": "trae-code-edit",
+        "id": "ai_tab-cue-batch-20260914173351010000097154483B4FD-20260914173351010000097154483B4FD-3",
+        "model": "default"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "edit_kind": "file_edit",
+        "source_scene": "cue",
+        "external_session_id": "cue-batch-20260914173351010000097154483B4FD-20260914173351010000097154483B4FD-3",
+        "tool": "trae-code-edit",
+        "client_type": "ide"
+      }
+    },
+    "s_6b902d02497720": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6aa762c79bd17b113bb2ef0d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>"
+    },
+    "s_fe795de7a42f7b": {
+      "agent_id": {
+        "tool": "trae-cue",
+        "id": "ai_tab-icr-fd42eb2f-dcd0-4aad-ba8c-3921c9776e04",
+        "model": "default"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "tool": "trae-cue",
+        "client_type": "ide",
+        "external_session_id": "icr-fd42eb2f-dcd0-4aad-ba8c-3921c9776e04",
+        "source_scene": "cue",
+        "edit_kind": "file_edit"
+      }
+    }
+  }
+}
