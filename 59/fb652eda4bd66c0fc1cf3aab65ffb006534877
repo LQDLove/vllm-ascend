@@ -1,0 +1,32 @@
+vllm_ascend/eplb/core/policy/policy_flashlb.py
+  s_093342f2fe086f::t_78e20ed4848eed 476-485,491
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "59fb652eda4bd66c0fc1cf3aab65ffb006534877",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "tool_use_id": "6a9cc16196f76ae0ae591a1c",
+        "operation_id": "6a9cc16196f76ae0ae591a1c",
+        "client_type": "ide",
+        "runtime_client": "trae-tob-git-ai",
+        "tool_type": "agent",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "dedupe_key": "6a96bb7b763826ac622d7a7d:6a9cc16196f76ae0ae591a1c:afterEdit:a4852a7b",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "source_scene": "unknown",
+        "tool_id": "Edit",
+        "edit_kind": "file_edit"
+      }
+    }
+  }
+}

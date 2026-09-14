@@ -1,0 +1,32 @@
+.github/workflows/pr_test.yaml
+  s_e8c109cb8e8846::t_59d0e07203916d 101-107
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "8a656990e849082f209f696a518eb1dacead4895",
+  "prompts": {},
+  "sessions": {
+    "s_e8c109cb8e8846": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a9bd88696f76ae0ae59168a",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "LQD <1107297340@qq.com>",
+      "custom_attributes": {
+        "runtime_client": "trae-tob-git-ai",
+        "edit_kind": "file_edit",
+        "operation_id": "6a9bddc896f76ae0ae59177e",
+        "tool_use_id": "6a9bddc896f76ae0ae59177e",
+        "tool_id": "Edit",
+        "dedupe_key": "6a9bd88696f76ae0ae59168a:6a9bddc896f76ae0ae59177e:afterEdit:8112a6ae",
+        "session_id": "6a9bd88696f76ae0ae59168a",
+        "client_type": "ide",
+        "tool_type": "agent",
+        "source_scene": "unknown",
+        "external_session_id": "6a9bd88696f76ae0ae59168a"
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+tests/ut/spec_decode/test_dspark_proposer.py
+  s_093342f2fe086f::t_afa7a7317d0bf6 336
+vllm_ascend/spec_decode/dspark_proposer.py
+  s_093342f2fe086f::t_943f5fe5aa60f7 42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "bb70aca390aeb4e7a0b899ab8ec707636623ffaa",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>"
+    }
+  }
+}

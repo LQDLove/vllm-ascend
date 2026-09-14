@@ -1,0 +1,19 @@
+vllm_ascend/patch/platform/patch_kv_cache_coordinator.py
+  s_093342f2fe086f::t_7bf01ef656f7ea 140-142
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "9f7c9c76b8f3544bd48e6610d709c88fb7468dce",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>"
+    }
+  }
+}

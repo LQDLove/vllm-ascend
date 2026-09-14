@@ -1,0 +1,48 @@
+vllm_ascend/worker/model_runner_v1.py
+  s_093342f2fe086f::t_ce6247f3a81947 4223-4224,4232-4233,4236-4245,4250,4253,4255
+  s_093342f2fe086f::t_19f9e3c9ad7037 4431
+  s_093342f2fe086f::t_2bbdc140e3be28 4359
+  s_093342f2fe086f::t_1e2e6673962716 4482-4483
+  s_093342f2fe086f::t_62366f43c8b9f7 4295,4298
+  s_093342f2fe086f::t_3dae930fb3679d 4456
+  s_093342f2fe086f::t_0c85d72e16a8e5 4383-4384
+  s_093342f2fe086f::t_4d9964dc17d274 4256-4261
+  s_093342f2fe086f::t_96e4c412e2c397 4183-4190
+tests/ut/worker/test_model_runner_v1.py
+  s_093342f2fe086f::t_537608c3deffaa 518-621,627,629
+  s_093342f2fe086f::t_76a9687b59d6b7 622-626,628
+vllm_ascend/worker/v2/attn_utils.py
+  s_093342f2fe086f::t_7d143f3bc3ba2d 673-674,676
+  s_093342f2fe086f::t_8e3d254f7f65dd 591-603,606,609,611,616,623,625-639,641-649,652,656,658-659,665-667
+tests/ut/worker/test_attn_utils_v2.py
+  s_093342f2fe086f::t_b280f363347747 126-256
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "41f39a92cae5a7bb760c355cf7dcfd9bc443efa0",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "tool_type": "agent",
+        "edit_kind": "file_edit",
+        "runtime_client": "trae-tob-git-ai",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "client_type": "ide",
+        "tool_id": "Edit",
+        "tool_use_id": "6a96ef2b763826ac622d7dfc",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "source_scene": "unknown",
+        "operation_id": "6a96ef2b763826ac622d7dfc",
+        "dedupe_key": "6a96bb7b763826ac622d7a7d:6a96ef2b763826ac622d7dfc:afterEdit:0f1b6b51"
+      }
+    }
+  }
+}

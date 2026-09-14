@@ -1,0 +1,32 @@
+vllm_ascend/patch/platform/__init__.py
+  s_093342f2fe086f::t_98ebb157e5346a 48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "98ef8e78bbabdcbbd48c1067e7a4461f89acd64f",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": null,
+      "custom_attributes": {
+        "operation_id": "6a9a965b96f76ae0ae59159d",
+        "client_type": "ide",
+        "tool_id": "Edit",
+        "dedupe_key": "6a96bb7b763826ac622d7a7d:6a9a965b96f76ae0ae59159d:afterEdit:1837c9be",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "edit_kind": "file_edit",
+        "tool_type": "agent",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "tool_use_id": "6a9a965b96f76ae0ae59159d",
+        "source_scene": "unknown",
+        "runtime_client": "trae-tob-git-ai"
+      }
+    }
+  }
+}

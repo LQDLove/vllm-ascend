@@ -1,0 +1,37 @@
+vllm_ascend/worker/v2/pcp_manager.py
+  s_093342f2fe086f::t_ea46a8ae8719ae 392-402,404-405,407-408
+vllm_ascend/worker/v2/model_states/default.py
+  s_093342f2fe086f::t_cef21ff341a160 71
+vllm_ascend/worker/v2/aclgraph_utils.py
+  s_093342f2fe086f::t_6b644ff4afed69 44
+  s_093342f2fe086f::t_585b1808dd7421 72-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "25b1f7553daf1dacc883f5d328de4b1278381df8",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "tool_id": "Edit",
+        "tool_type": "agent",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "runtime_client": "trae-tob-git-ai",
+        "source_scene": "unknown",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "dedupe_key": "6a96bb7b763826ac622d7a7d:6a9cb7e196f76ae0ae5919d5:afterEdit:93cceb0a",
+        "edit_kind": "file_edit",
+        "tool_use_id": "6a9cb7e196f76ae0ae5919d5",
+        "client_type": "ide",
+        "operation_id": "6a9cb7e196f76ae0ae5919d5"
+      }
+    }
+  }
+}

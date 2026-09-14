@@ -1,0 +1,44 @@
+vllm_ascend/patch/platform/__init__.py
+  s_093342f2fe086f::t_98ebb157e5346a 48
+vllm_ascend/patch/__init__.py
+  s_093342f2fe086f::t_ff6e5745120b5e 111,113-115,119,745,747
+  s_093342f2fe086f::t_b3e858de58ad25 1258-1274
+vllm_ascend/worker/model_runner_v1.py
+  s_093342f2fe086f::t_78694df7918469 1781-1782
+  s_093342f2fe086f::t_ee43a9ca1b8f7a 2090-2092
+vllm_ascend/ops/fused_moe/routed_experts.py
+  s_093342f2fe086f::t_9f941080991028 301
+vllm_ascend/models/minimax_m3/minimax_m3.py
+  s_093342f2fe086f::t_7421b4189988fa 44,549
+tests/ut/models/test_deepseek_v4_moe.py
+  s_093342f2fe086f::t_5101d2cc7a26d3 79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "93bc20503e50a8bfd24177613bd3ea6e7616c7a6",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": null,
+      "custom_attributes": {
+        "source_scene": "unknown",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "runtime_client": "trae-tob-git-ai",
+        "tool_id": "Edit",
+        "client_type": "ide",
+        "dedupe_key": "6a96bb7b763826ac622d7a7d:6a9a965b96f76ae0ae59159d:afterEdit:1837c9be",
+        "tool_type": "agent",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "operation_id": "6a9a965b96f76ae0ae59159d",
+        "tool_use_id": "6a9a965b96f76ae0ae59159d",
+        "edit_kind": "file_edit"
+      }
+    }
+  }
+}

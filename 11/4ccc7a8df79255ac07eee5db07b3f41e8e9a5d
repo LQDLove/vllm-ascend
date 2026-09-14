@@ -1,0 +1,33 @@
+tests/e2e/pull_request/four_card/context_parallel/test_accuracy_v2.py
+  s_093342f2fe086f::t_e24e38fa8f6a65 69-88
+  s_093342f2fe086f::t_6baa2e95a735c1 67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "114ccc7a8df79255ac07eee5db07b3f41e8e9a5d",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "tool_type": "agent",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "tool_use_id": "6a99153e763826ac622d808a",
+        "operation_id": "6a99153e763826ac622d808a",
+        "edit_kind": "file_edit",
+        "dedupe_key": "6a96bb7b763826ac622d7a7d:6a99153e763826ac622d808a:afterEdit:05bd34ab",
+        "runtime_client": "trae-tob-git-ai",
+        "tool_id": "Edit",
+        "source_scene": "unknown",
+        "client_type": "ide"
+      }
+    }
+  }
+}

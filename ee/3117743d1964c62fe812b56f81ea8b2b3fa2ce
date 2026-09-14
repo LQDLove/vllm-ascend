@@ -1,0 +1,33 @@
+vllm_ascend/worker/model_runner_v1.py
+  s_093342f2fe086f::t_ee43a9ca1b8f7a 2088-2096
+  s_093342f2fe086f::t_32e36a02d4b0b2 1783
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "ee3117743d1964c62fe812b56f81ea8b2b3fa2ce",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": null,
+      "custom_attributes": {
+        "runtime_client": "trae-tob-git-ai",
+        "edit_kind": "file_edit",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "tool_use_id": "6a9a965b96f76ae0ae59159d",
+        "client_type": "ide",
+        "dedupe_key": "6a96bb7b763826ac622d7a7d:6a9a965b96f76ae0ae59159d:afterEdit:1837c9be",
+        "tool_id": "Edit",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "operation_id": "6a9a965b96f76ae0ae59159d",
+        "source_scene": "unknown",
+        "tool_type": "agent"
+      }
+    }
+  }
+}

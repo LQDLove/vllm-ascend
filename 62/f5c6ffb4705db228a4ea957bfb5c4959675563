@@ -1,0 +1,31 @@
+vllm_ascend/distributed/kv_transfer/kv_p2p/mooncake_hybrid_connector.py
+  s_093342f2fe086f::t_0f615385706887 1716-1735,1745-1760,1788-1804
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "62f5c6ffb4705db228a4ea957bfb5c4959675563",
+  "prompts": {},
+  "sessions": {
+    "s_093342f2fe086f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a96bb7b763826ac622d7a7d",
+        "model": "glm-5.3-flash__dev"
+      },
+      "human_author": "liaoqidan <1107297340@qq.com>",
+      "custom_attributes": {
+        "display_model_name": "GLM-5.3-Flash",
+        "tool_use_id": "6a9a8c5c96f76ae0ae591508",
+        "edit_kind": "bash",
+        "tool_name": "RunCommand",
+        "operation_id": "6a9a8c5c96f76ae0ae591508",
+        "client_type": "ide",
+        "session_id": "6a96bb7b763826ac622d7a7d",
+        "external_session_id": "6a96bb7b763826ac622d7a7d",
+        "runtime_client": "trae-tob-git-ai",
+        "source_scene": "agent"
+      }
+    }
+  }
+}
